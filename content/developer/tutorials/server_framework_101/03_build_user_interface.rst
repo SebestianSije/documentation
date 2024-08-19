@@ -16,8 +16,8 @@ Add menus items
 different parts of Odoo and can be nested to form a hierarchical structure. This allows the
 functionalities of complex applications to be organized into categories and sub-categories and makes
 them easier to navigate. The top level of the menu structure typically contains the menu items for
-the main applications (like "Contacts", "Sales", and "Accounting"). These top-level menu items can
-also be visually enhanced with custom icons for better recognition.
+the main applications (like :guilabel:`Contacts`, :guilabel:`Sales`, and :guilabel:`Accounting`).
+These top-level menu items can also be visually enhanced with custom icons for better recognition.
 
 Menu items can take on two distinct roles:
 
@@ -47,15 +47,16 @@ a data file. Let’s do just that and add menu items to our real estate app!
 
 .. exercise::
    #. Create and declare a new :file:`menus.xml` file at the root of the `real_estate` module.
-   #. Describe a new "Real Estate" menu item to serve as root menu for our real estate app.
+   #. Describe a new :guilabel:`Real Estate` menu item to serve as root menu for our real estate
+      app.
 
       - Leave the `parent_id` field empty to place the menu item in the top-level menu.
       - Use the `static/description/icon.png` file as `web_icon`, in the format
         `<module>,<icon_file_path>`.
 
-   #. Nest new "Properties" and "Settings" menu items under the root menu item. As we have not yet
-      created an action to browse properties or open settings, reference the following existing
-      actions instead:
+   #. Nest new :guilabel:`Properties` and :guilabel:`Settings` menu items under the root menu item.
+      As we have not yet created an action to browse properties or open settings, reference the
+      following existing actions instead:
 
       - `base.open_module_tree` that opens the list of modules.
       - `base.action_client_base_menu` that opens the general settings.
@@ -128,7 +129,7 @@ it simplifies the syntax and automatically handles some technical details for yo
       </menuitem>
 
    .. note::
-      - The outer `menuitem` data operation creates the top-level "Product" menu item.
+      - The outer `menuitem` data operation creates the top-level :guilabel:`Product` menu item.
       - The specifications (`name`, `web_icon`, `sequence`, `action`, ...) of menu items are set
         through attributes of the XML element.
       - The menu items hierarchy is defined by nesting their XML elements.
@@ -197,9 +198,6 @@ the `ir.actions.act_window` model whose key fields include:
 `help`
    An optional help text for the users when there are no records to display.
 
-.. seealso::
-   :doc:`Reference documentation for actions <../../reference/backend/actions>`
-
 .. example::
    The example below defines an action to open existing products in either list or form view.
 
@@ -220,16 +218,18 @@ the `ir.actions.act_window` model whose key fields include:
       The content of the `help` field can be written in different formats thanks to the `type`
       attribute of the :ref:`field <reference/data/field>` data operation.
 
+.. seealso::
+   :ref:`Reference documentation for window actions <reference/actions/window>`
+
 As promised, we'll finally get to interact with our real estate properties in the UI. All we need
 now is an action to assign to the menu item.
 
 .. exercise::
-
    #. Create and declare a new :file:`actions.xml` file at the root of the `real_estate` module.
-   #. Describe a new "Properties" window action that opens `real.estate.property` records in list
-      and form views, and assign it to the "Properties" menu item. Be creative with the help text!
-      For reference, the list of supported classes can be found in the `view.scss
-      <{GITHUB_PATH}/addons/web/static/src/views/view.scss>`_ file.
+   #. Describe a new :guilabel:`Properties` window action that opens `real.estate.property` records
+      in list and form views, and assign it to the :guilabel:`Properties` menu item. Be creative
+      with the help text! For reference, the list of supported classes can be found in the
+      `view.scss <{GITHUB_PATH}/addons/web/static/src/views/view.scss>`_ file.
 
    .. tip::
       Pay attention to the declaration order of data files in the manifest; you might introduce a
@@ -279,9 +279,10 @@ now is an action to assign to the menu item.
           action="real_estate.view_properties_action"
       />
 
-Clicking the "Properties" menu item now displays a list view of the default properties we created
-earlier. As we specified in the action that both list and form views were allowed, you can click any
-property record to display its form view. Delete all three records to see the help text you created.
+Clicking the :guilabel:`Properties` menu item now displays a list view of the default properties we
+created earlier. As we specified in the action that both list and form views were allowed, you can
+click any property record to display its form view. Delete all three records to see the help text
+you created.
 
 .. _tutorials/server_framework_101/create_custom_views:
 
@@ -314,11 +315,6 @@ the type of the view, and various inner components that depend on the view type.
 structure and content of the view. These components can be structural (like `sheet` that makes the
 layout responsive, or `group` that defines column layouts) or semantic (like `field` that displays
 field labels and values).
-
-.. seealso::
-   - :doc:`Reference documentation for view records <../../reference/user_interface/view_records>`
-   - :doc:`Reference documentation for view architectures
-     <../../reference/user_interface/view_architectures>`
 
 .. example::
    The following examples demonstrate how to define simple list, form and search views for the
@@ -374,9 +370,13 @@ field labels and values).
       </record>
 
    .. note::
-
       - The XML structure differs between view types.
       - The `description` field is omitted from the list view because it wouldn't fit visually.
+
+.. seealso::
+   - :doc:`Reference documentation for view records <../../reference/user_interface/view_records>`
+   - :doc:`Reference documentation for view architectures
+     <../../reference/user_interface/view_architectures>`
 
 In :ref:`the previous section <tutorials/server_framework_101/define_window_actions>`, we defined
 the `view_mode` of our action to display `real.estate.property` records in list and form view.
@@ -397,15 +397,17 @@ List view
 For a start, the list view could use more fields than just the name.
 
 .. exercise::
-
    #. Create a new :file:`real_estate_property_views.xml` file at the root of the `real_estate`
       module.
    #. Create a custom list view to display the following fields of the `real.estate.property` model
-      in the given order: name, state, type, selling price, availability date, floor area, number of
-      bedrooms, presence of a garden, and presence of a garage.
-   #. Make the visibility of the floor area and all following fields optional so that only the floor
-      area is visible by default, while the remaining fields are hidden by default and must be
-      displayed by accessing the view's column selector (:icon:`oi-settings-adjust` button).
+      in the given order: :guilabel:`Name`, :guilabel:`State`, :guilabel:`Type`,
+      :guilabel:`Selling Price`, :guilabel:`Availability Date`, :guilabel:`Floor Area`,
+      :guilabel:`Number of Bedrooms`, :guilabel:`Garage`, :guilabel:`Garden`, and
+      :guilabel:`Garden Area`.
+   #. Make the visibility of :guilabel:`Floor Area` and all following fields optional so that only
+      the floor area is visible by default, while the remaining fields are hidden by default and
+      must be manually displayed by accessing the view's column selector
+      (:icon:`oi-settings-adjust` button).
    #. After restarting the server to load the new data, refresh the browser to see the result.
 
    .. tip::
@@ -449,8 +451,9 @@ For a start, the list view could use more fields than just the name.
                       <field name="availability_date"/>
                       <field name="floor_area" optional="show"/>
                       <field name="bedrooms" optional="hide"/>
-                      <field name="has_garden" optional="hide"/>
                       <field name="has_garage" optional="hide"/>
+                      <field name="has_garden" optional="hide"/>
+                      <field name="garden_area" optional="hide"/>
                   </list>
               </field>
           </record>
@@ -463,7 +466,6 @@ Form view
 ---------
 
 .. exercise::
-
    In the :file:`real_estate_property_views.xml` file, create a custom form view to display all
    fields of the `real.estate.property` model in a well-structured manner:
 
@@ -475,8 +477,10 @@ Form view
    - The image should be displayed as a thumbnail on the right side of the form.
    - The fields should be grouped in two sections displayed next to each other:
 
-     - Listing Information: Type, Selling Price, Availability Date, Active
-     - Building Specifications: Floor Area, Number of Bedrooms, Garden, Garage
+     - Listing Information: :guilabel:`Type`, :guilabel:`Selling Price`,
+       :guilabel:`Availability Date`, :guilabel:`Active`
+     - Building Specifications: :guilabel:`Floor Area`, :guilabel:`Number of Bedrooms`,
+       :guilabel:`Garage`, :guilabel:`Garden`, :guilabel:`Garden Area`
 
    - The description should be displayed at the bottom of the form in its own section, should have
      no label, should have a placeholder, and should take the full width.
@@ -525,8 +529,9 @@ Form view
                           <group string="Building Specifications">
                               <field name="floor_area"/>
                               <field name="bedrooms"/>
-                              <field name="has_garden"/>
                               <field name="has_garage"/>
+                              <field name="has_garden"/>
+                              <field name="garden_area"/>
                           </group>
                       </group>
                       <separator string="Description"/>
@@ -555,18 +560,11 @@ automatically excluded from searches. You can observe this behavior by deselecti
 :guilabel:`Active` checkbox for one of your property records: you'll notice the record no longer
 appears upon returning to the list view.
 
-.. seealso::
-   :ref:`Reference documentation for the list of reserved field names
-   <reference/orm/fields/reserved>`
-
 To facilitate the browsing of archived properties, we need to create a search view. Unlike list and
 form views, search views are not used to display record data on screen. Instead, they define the
 search behavior and enable users to search on specific fields. They also provide pre-defined
 **filters** that allow for quickly searching with complex queries and grouping records by particular
 fields.
-
-.. seealso::
-   :ref:`Reference documentation for search views <reference/view_architectures/search>`
 
 The most common way to set up filters is through **search domains**. Domains are used to select
 specific records of a model by defining a list of criteria. Each criterion is a triplet in the
@@ -594,32 +592,37 @@ before its operands`.
       ['|', ('category', '=', 'electronics'), '!', '&', ('price', '>=', 1000), ('price', '<', 2000)]
 
 .. seealso::
-   :ref:`Reference documentation for search domains <reference/orm/domains>`
+   - :ref:`Reference documentation for search views <reference/view_architectures/search>`
+   - :ref:`Reference documentation for search domains <reference/orm/domains>`
+   - :ref:`Reference documentation for the list of reserved field names
+     <reference/orm/fields/reserved>`
 
 All the generic search view only allows for is searching on property names; that's the bare minimum.
 Let's enhance the search capabilities.
 
 .. exercise::
-
    #. Create a custom search view with the following features:
 
       - Enable searching on the these fields:
 
-        - Name: Match records whose name contain the search value.
-        - Description: Match records whose description *or* name contains the search value.
-        - Selling price: Match records with a price *less than or equal to* the search value.
-        - Floor area: Match records with a floor area *at least* the search value.
-        - Number of bedrooms: Match records with *at least* the given number of bedrooms.
+        - :guilabel:`Name`: Match records whose name contain the search value.
+        - :guilabel:`Description`: Match records whose description *or* name contains the search
+          value.
+        - :guilabel:`Selling Price`: Match records with a price *less than or equal to* the search
+          value.
+        - :guilabel:`Floor Area`: Match records with a floor area *at least* the search value.
+        - :guilabel:`Number of Bedrooms`: Match records with *at least* the given number of
+          bedrooms.
 
       - Implement these filters:
 
-        - For Sale: The state is "New" or "Offer Received".
-        - Availability Date: Display a list of pre-defined availability date values.
-        - Garden: The property has a garden.
-        - Garage: The property has a garage.
-        - Archived: The property is archived.
+        - :guilabel:`For Sale`: The state is :guilabel:`New` or :guilabel:`Offer Received`.
+        - :guilabel:`Availability Date`: Display a list of pre-defined availability date values.
+        - :guilabel:`Garage`: The property has a garage.
+        - :guilabel:`Garden`: The property has a garden.
+        - :guilabel:`Archived`: The property is archived.
 
-      - Combine selected filters with a logical AND, except for Garden and Garage, which should use
+      - Combine selected filters with a logical AND, except for Garage and Garden, which should use
         OR when both are selected.
       - Enable grouping properties by state and type.
 
@@ -672,8 +675,8 @@ Let's enhance the search capabilities.
                   <separator/>
                   <filter name="filter_availability" date="availability_date"/>
                   <separator/>
-                  <filter name="filter_garden" string="Garden" domain="[('has_garden', '=', True)]"/>
                   <filter name="filter_garage" string="Garage" domain="[('has_garage', '=', True)]"/>
+                  <filter name="filter_garden" string="Garden" domain="[('has_garden', '=', True)]"/>
                   <separator/>
                   <filter name="filter_inactive" string="Archived" domain="[('active', '=', False)]"/>
 
