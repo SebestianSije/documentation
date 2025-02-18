@@ -432,7 +432,28 @@ Send GSTR-1
 ~~~~~~~~~~~
 
 #. The user can verify the :ref:`GSTR-1 <india/gstr-1_report>` report before uploading it to the
-   **GST portal** by clicking :guilabel:`GSTR-1 Report`;
+   **GST portal** by clicking :guilabel:`GSTR-1 Report`.
+
+   .. image:: india/gst-gstr-1-verify.png
+      :alt: GSTR-1 verify
+
+   This redirects them to the :ref:`GSTR-1 <india/gstr-1_report>` page, where the system performs
+   the following basic validations to ensure compliance with GST portal's requirements:
+
+   - **Incorrect Tax Application:** Tax type does not match the :guilabel:`Fiscal Position`
+     (:guilabel:`CGST/SGST` applied instead of :guilabel:`IGST` for interstate transactions, or
+     :guilabel:`IGST` applied instead of :guilabel:`CGST/SGST` for intrastate transactions).
+   - **Missing HSN Code:** No HSN Code defined for the product.
+   - **Invalid HSN Code for Services:** HSN Code for a service does not start with "99" or is
+     incorrect.
+   - **Non-compliant UQC:** Unit Quantity Code (UQC) does not meet Indian GST standards.
+
+   If any validation fails, the system alerts users with a warning, highlighting the
+   discrepancies and providing a direct link to the affected lines. This ensures that errors are
+   addressed before submission, enabling a smooth and hassle-free filing process.
+
+   .. image:: india/gst-gstr-1-validation.png
+      :alt: GSTR-1 validation warning
 
 #. The user can also get details to be submitted in **GSTR-1** in **Spreadsheet view** by clicking
    on :guilabel:`Generate`;
