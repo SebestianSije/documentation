@@ -86,9 +86,9 @@ that computed fields remain consistent.
         recordset in memory.
 
 .. seealso::
-   - :ref:`Reference documentation for computed fields <reference/fields/compute>`
-   - :ref:`Reference documentation for recordsets <reference/orm/recordsets>`
-   - Reference documentation for the :meth:`@api.depends() <odoo.api.depends>` decorator
+   - :ref:`Reference documentation on computed fields <reference/fields/compute>`
+   - :ref:`Reference documentation on recordsets <reference/orm/recordsets>`
+   - Reference documentation on the :meth:`@api.depends() <odoo.api.depends>` decorator
    - :ref:`Coding guidelines on naming and ordering the members of model classes
      <contributing/coding_guidelines/model_members>`
 
@@ -493,7 +493,7 @@ argument, just like regular computed fields.
       category_name = fields.Char(string="Category Name", related='category_id.name')
 
 .. seealso::
-   :ref:`Reference documentation for related fields <reference/fields/related>`
+   :ref:`Reference documentation on related fields <reference/fields/related>`
 
 In :doc:`04_relational_fields`, we introduced several relational fields. Retrieving information from
 their related models often requires additional steps from the user, but we can use related fields to
@@ -641,11 +641,11 @@ through `self`. If field values are modified, the changes are automatically refl
       - Blocking user errors are raised as exceptions.
 
 .. seealso::
-   - Reference documentation for the :meth:`@api.onchange() <odoo.api.onchange>` decorator
+   - Reference documentation on the :meth:`@api.onchange() <odoo.api.onchange>` decorator
    - :doc:`How-to guide on translations </developer/howtos/translations>`
-   - Reference documentation for the :class:`UserError <odoo.exceptions.UserError>` exception
-   - :ref:`Reference documentation for the environment object <reference/orm/environment>`
-   - Reference documentation for the :meth:`search <odoo.models.Model.search>` method
+   - Reference documentation on the :class:`UserError <odoo.exceptions.UserError>` exception
+   - :ref:`Reference documentation on the environment object <reference/orm/environment>`
+   - Reference documentation on the :meth:`search <odoo.models.Model.search>` method
 
 In our real estate app, data entry could be more intuitive and efficient. Let's use onchange methods
 to automate updates and guide users as they edit data.
@@ -757,9 +757,9 @@ expression to validate, and the error message to display if the constraint is vi
           ]
 
 .. seealso::
-   - Reference documentation for the :attr:`_sql_constraints
+   - Reference documentation on the :attr:`_sql_constraints
      <odoo.models.BaseModel._sql_constraints>` class attribute
-   - `Reference documentation for PostgreSQL's constraints
+   - `Reference documentation on PostgreSQL's constraints
      <https://www.postgresql.org/docs/current/ddl-constraints.html>`_
 
 .. exercise::
@@ -857,8 +857,8 @@ perform custom validation and raise blocking validation errors if the constraint
                      )
 
 .. seealso::
-   - Reference documentation for the :meth:`@api.constrains <odoo.api.constrains()>` decorator
-   - Reference documentation for the :class:`ValidationError <odoo.exceptions.ValidationError>`
+   - Reference documentation on the :meth:`@api.constrains <odoo.api.constrains()>` decorator
+   - Reference documentation on the :class:`ValidationError <odoo.exceptions.ValidationError>`
      exception
 
 .. exercise::
@@ -956,7 +956,7 @@ creation process.
       it's done in data files.
 
 .. seealso::
-   Reference documentation for the :meth:`ref <odoo.api.Environment.ref>` method.
+   Reference documentation on the :meth:`ref <odoo.api.Environment.ref>` method.
 
 To make our real estate app more user-friendly, we can help with data entry by pre-filling key
 fields with default values.
@@ -1088,13 +1088,13 @@ accessed directly using :code:`record.field`.
         is equivalent to calling :code:`recordset.write({'field': value})`.
 
 .. seealso::
-   - Reference documentation for the :meth:`@api.model_create_multi <odoo.api.model_create_multi>`
+   - Reference documentation on the :meth:`@api.model_create_multi <odoo.api.model_create_multi>`
      decorator.
-   - Reference documentation for the :meth:`create <odoo.models.Model.create>` method.
-   - Reference documentation for the :meth:`write <odoo.models.Model.write>` method.
-   - Reference documentation for the :meth:`unlink <odoo.models.Model.unlink>` method.
-   - Reference documentation for the :meth:`browse <odoo.models.Model.browse>` method.
-   - Reference documentation for the :meth:`exists <odoo.models.Model.exists>` method.
+   - Reference documentation on the :meth:`create <odoo.models.Model.create>` method.
+   - Reference documentation on the :meth:`write <odoo.models.Model.write>` method.
+   - Reference documentation on the :meth:`unlink <odoo.models.Model.unlink>` method.
+   - Reference documentation on the :meth:`browse <odoo.models.Model.browse>` method.
+   - Reference documentation on the :meth:`exists <odoo.models.Model.exists>` method.
 
 .. exercise::
    #. Move a property to the :guilabel:`Offer Received` state when its first offer is received.
@@ -1205,7 +1205,7 @@ action, a `button` element must be added to the view, with its `type` attribute 
         - Prevent users from creating or editing products when browsing them through the button.
 
 .. seealso::
-   Reference documentation for :ref:`button containers
+   Reference documentation on :ref:`button containers
    <reference/view_architectures/form/button_container>`.
 
 .. exercise::
@@ -1218,7 +1218,7 @@ action, a `button` element must be added to the view, with its `type` attribute 
    - Allow users to browse offers in list and form views.
 
    .. tip::
-      - Rely on the reference documentation for :ref:`action buttons
+      - Refer to the documentation on :ref:`action buttons
         <reference/view_architectures/form/button>` in form views.
       - Find icon codes (`fa-<something>`) in the `Font Awesome v4 catalog
         <https://fontawesome.com/v4/icons/>`_.
@@ -1315,8 +1315,8 @@ action descriptor.
    #. tmp  ... in the header.
 
    .. tip::
-      - Rely on the reference documentation for :ref:`headers
-        <reference/view_architectures/form/header>` in form views.
+      - Refer to the documentation on :ref:`headers <reference/view_architectures/form/header>` in
+        form views.
 
 .. todo: accept/refuse offer buttons -> auto refuse others when accepting (write)
 .. todo: multi-checkbox refuse offers in bulk

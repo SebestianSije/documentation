@@ -150,8 +150,8 @@ create a model with some fields to represent real estate properties and their ch
    .. tip::
       - The class name doesn't matter, but the convention is to use the model's upper-cased `_name`
         (without dots).
-      - Rely on the reference documentation for :ref:`fields <reference/orm/fields>` to select the
-        right class and attributes for each field.
+      - Refer to the documentation on :ref:`fields <reference/orm/fields>` to select the right class
+        and attributes for each field.
 
 .. spoiler:: Solution
 
@@ -317,7 +317,7 @@ typically find:
 - `write_uid`: The ID of the user who last modified the record.
 
 .. seealso::
-   :ref:`Reference documentation for automatic fields <reference/fields/automatic>`
+   :ref:`Reference documentation on automatic fields <reference/fields/automatic>`
 
 .. _tutorials/server_framework_101/load_data_files:
 
@@ -387,7 +387,7 @@ created from a data file so that records can be referenced by their full XML ID 
         ID as value.
 
 .. seealso::
-   :doc:`Reference documentation for XML data files <../../reference/backend/data>`
+   :doc:`Reference documentation on XML data files <../../reference/backend/data>`
 
 Let's now load some default real estate properties in our database.
 
@@ -518,7 +518,7 @@ same model. It also loads faster, making it the go-to format when performance ma
       - Each subsequent line describes one new record.
 
 .. seealso::
-   :ref:`Reference documentation for CSV data files <reference/data/csvdatafiles>`
+   :ref:`Reference documentation on CSV data files <reference/data/csvdatafiles>`
 
 In business applications like Odoo, one of the first questions to consider is who can access the
 data. By default, access to newly created models is restricted until it is explicitly granted.

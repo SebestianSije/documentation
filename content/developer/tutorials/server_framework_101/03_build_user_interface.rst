@@ -219,7 +219,7 @@ the `ir.actions.act_window` model whose key fields include:
       attribute of the :ref:`field <reference/data/field>` data operation.
 
 .. seealso::
-   :ref:`Reference documentation for window actions <reference/actions/window>`
+   :ref:`Reference documentation on window actions <reference/actions/window>`
 
 As promised, we'll finally get to interact with our real estate properties in the UI. All we need
 now is an action to assign to the menu item.
@@ -374,8 +374,8 @@ field labels and values).
       - The `description` field is omitted from the list view because it wouldn't fit visually.
 
 .. seealso::
-   - :doc:`Reference documentation for view records <../../reference/user_interface/view_records>`
-   - :doc:`Reference documentation for view architectures
+   - :doc:`Reference documentation on view records <../../reference/user_interface/view_records>`
+   - :doc:`Reference documentation on view architectures
      <../../reference/user_interface/view_architectures>`
 
 In :ref:`the previous section <tutorials/server_framework_101/define_window_actions>`, we defined
@@ -411,7 +411,7 @@ For a start, the list view could use more fields than just the name.
    #. After restarting the server to load the new data, refresh the browser to see the result.
 
    .. tip::
-      Rely on the reference documentation for :ref:`the field component in list views
+      Refer to the documentation on :ref:`the field component in list views
       <reference/view_architectures/list/field>`.
 
    The final result should look like this:
@@ -486,7 +486,7 @@ Form view
      no label, should have a placeholder, and should take the full width.
 
    .. tip::
-      - Rely on the reference documentation for :ref:`structural components
+      - Refer to the documentation on :ref:`structural components
         <reference/view_architectures/form/structural>` and :ref:`the field component
         <reference/view_architectures/form/field>` in form views.
       - Add the :option:`--dev xml <odoo-bin --dev>` argument to the server start-up command to
@@ -592,9 +592,9 @@ before its operands`.
       ['|', ('category', '=', 'electronics'), '!', '&', ('price', '>=', 1000), ('price', '<', 2000)]
 
 .. seealso::
-   - :ref:`Reference documentation for search views <reference/view_architectures/search>`
-   - :ref:`Reference documentation for search domains <reference/orm/domains>`
-   - :ref:`Reference documentation for the list of reserved field names
+   - :ref:`Reference documentation on search views <reference/view_architectures/search>`
+   - :ref:`Reference documentation on search domains <reference/orm/domains>`
+   - :ref:`Reference documentation of the list of reserved field names
      <reference/orm/fields/reserved>`
 
 All the generic search view only allows for is searching on property names; that's the bare minimum.
@@ -631,7 +631,7 @@ Let's enhance the search capabilities.
 
    .. tip::
 
-      - Rely on the reference documentation for :ref:`search view components
+      - Refer to the documentation on :ref:`search view components
         <reference/view_architectures/search/components>`, :ref:`search domains
         <reference/orm/domains>`, and :ref:`search defaults
         <reference/view_architectures/search/defaults>`.

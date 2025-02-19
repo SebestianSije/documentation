@@ -239,7 +239,7 @@ the referenced record's ID.
         record is deleted.
 
 .. seealso::
-   :ref:`Reference documentation for Many2one fields <reference/fields/many2one>`
+   :ref:`Reference documentation on Many2one fields <reference/fields/many2one>`
 
 In our real estate app, we currently have a fixed set of property types. To increase flexibility,
 let's replace the current `type` field with a many-to-one relationship to a separate model for
@@ -262,10 +262,9 @@ managing property types.
       property references them.
 
    .. tip::
-
       - As the window action doesn't allow opening property types in form view, clicking the
-        :guilabel:`New` button does nothing. To allow editing records in-place, rely on the
-        reference documentation for :ref:`root attributes of list views
+        :guilabel:`New` button does nothing. To allow editing records in-place, refer to the
+        documentation on :ref:`root attributes of list views
         <reference/view_architectures/list/root>`
       - The server will throw an error at start-up because it can't require a value for the new,
         currently empty field. To avoid fixing that manually in the database, run the command
@@ -652,7 +651,7 @@ end with the `_ids` suffix, indicating that they allow accessing the IDs of the 
       argument.
 
 .. seealso::
-   :ref:`Reference documentation for One2many fields <reference/fields/one2many>`
+   :ref:`Reference documentation on One2many fields <reference/fields/one2many>`
 
 A good use case for a one-to-many relationship in our real estate app would be to connect properties
 to a list of offers received from potential buyers.
@@ -847,7 +846,7 @@ convention, `Many2many` field names end with the `_ids` suffix, like for `One2ma
         of the junction table and of its columns.
 
 .. seealso::
-   :ref:`Reference documentation for Many2many fields <reference/fields/many2many>`
+   :ref:`Reference documentation on Many2many fields <reference/fields/many2many>`
 
 Let's conclude this extension of the model family by allowing to associate multiple description tags
 with each property.
@@ -866,7 +865,7 @@ with each property.
       to create new tags from the form view of properties.
 
    .. tip::
-      Rely on the reference documentation for :ref:`the field component
+      Refer to the documentation on :ref:`the field component
       <reference/view_architectures/form/field>` in form views to find a nice display for property
       tags.
 
