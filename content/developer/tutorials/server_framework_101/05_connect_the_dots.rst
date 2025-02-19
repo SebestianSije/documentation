@@ -1131,10 +1131,9 @@ accessed directly using :code:`record.field`.
 
    .. code-block:: python
       :caption: `real_estate_property.py`
-      :emphasize-lines: 1,5-27
+      :emphasize-lines: 1,4-26
 
       address_id = fields.Many2one(string="Address", comodel_name='res.partner')
-
       [...]
 
       @api.model_create_multi
@@ -1174,43 +1173,61 @@ preconfigured tasks.
 
 We have already seen how to :ref:`link menu items to XML-defined window actions
 <tutorials/server_framework_101/define_window_actions>`. To link a **button** to an XML-defined
-action, a `button` element must be added to the view, with its `type` attribute set to `action`. The
-`name` attribute should reference the XML ID of the action to be executed, following the format
+action, add a `button` element to the view, with its `type` attribute set to `action`. Use the
+`name` attribute to reference the XML ID of the action to execute, following the format
 `%(XML_ID)d`.
 
 .. example::
-   In the following example, a button is added to the product form view to display all products in
-   the same category.
+   In the following example, a button is added to the product form view to display all other
+   products in the same category.
 
    .. code-block:: xml
 
-      <form>
-          <sheet>
-              <div name="button_box">
-                  <button
-                      string="Similar Products"
-                      type="action"
-                      name="product.view_products_action"
-                      context="{'search_default_category_id': category_id.id, 'create': False, 'edit': False}"
-                  />
-              </div>
-          </sheet>
-      </form>
+      <record id="view_similar_products_action" model="ir.actions.act_window">
+          <field name="name">Products</field>
+          <field name="res_model">product</field>
+          <field name="domain">
+              [("id", "!=", active_id), ("category_id", "=", context.get('current_category_id'))]
+          </field>
+          <field name="view_mode">list,form</field>
+      </record>
+
+      <record id="product_form" model="ir.ui.view">
+          <form>
+              <sheet>
+                  <div name="button_box">
+                      <button
+                          string="Similar Products"
+                          type="action"
+                          name="product.view_similar_products_action"
+                          context="{
+                              'current_category_id': category_id,
+                              'create': False,
+                              'edit': False,
+                          }"
+                      />
+                  </div>
+              </sheet>
+          </form>
+      </record>
 
    .. note::
       - The button is placed at the top of the form view by using a button container (`button_box`).
       - The `context` attribute is used to:
 
-        - Filter the products to display only those in the same category as the current product.
+        - Pass the current category ID to the action which filters out products from other
+          categories.
         - Prevent users from creating or editing products when browsing them through the button.
 
 .. seealso::
-   Reference documentation on :ref:`button containers
-   <reference/view_architectures/form/button_container>`.
+   - Reference documentation on :ref:`button containers
+     <reference/view_architectures/form/button_container>`.
+   - Reference documentation on :ref:`environment variables for Python expressions in views
+     <reference/view_architectures/python_expression>`.
 
 .. exercise::
-   Replace the property form view's :guilabel:`Offers` notebook page with a **stat button**. This
-   button should:
+   Replace the :guilabel:`Offers` notebook page in the property form view with a **stat button**.
+   This button should:
 
    - Be placed at the top of the property form view.
    - Display the total number of offers for the property.
@@ -1222,22 +1239,21 @@ action, a `button` element must be added to the view, with its `type` attribute 
         <reference/view_architectures/form/button>` in form views.
       - Find icon codes (`fa-<something>`) in the `Font Awesome v4 catalog
         <https://fontawesome.com/v4/icons/>`_.
-      - Ensure that your count computations :ref:`scale with the number of records to process
-        <performance/good_practices/batch>`.
-      - Assign the `default_<field>` context key to a button to define default values when creating
-        new records opened through that button.
+      - Ensure your count computations :ref:`remain efficient as the number of records to process
+        grow <performance/good_practices/batch>`.
+      - Use the `default_<field>` context key to set default values when creating new records
+        through that button.
 
 .. spoiler:: Solution
 
    .. code-block:: python
       :caption: `real_estate_property.py`
-      :emphasize-lines: 4,8-15
+      :emphasize-lines: 4,7-14
 
       offer_ids = fields.One2many(
           string="Offers", comodel_name='real.estate.offer', inverse_name='property_id'
       )
       offer_count = fields.Integer(string="Offer Count", compute='_compute_offer_count')
-
       [...]
 
       @api.depends('offer_ids')
@@ -1272,21 +1288,26 @@ action, a `button` element must be added to the view, with its `type` attribute 
 
    .. code-block:: xml
       :caption: `real_estate_property_views.xml`
-      :emphasize-lines: 2-12
+      :emphasize-lines: 4-14
 
-      <sheet>
-          <div name="button_box" class="oe_button_box">
-              <button
-                  string="Offers"
-                  icon="fa-handshake-o"
-                  type="action"
-                  name="real_estate.view_offers_action"
-                  context="{'default_property_id': id}"
-              >
-                  <field string="Offers" name="offer_count" widget="statinfo"/>
-              </button>
-          </div>
+      <record id="real_estate.property_form" model="ir.ui.view">
           [...]
+              <sheet>
+                  <div name="button_box">
+                      <button
+                          string="Offers"
+                          icon="fa-handshake-o"
+                          type="action"
+                          name="real_estate.view_offers_action"
+                          context="{'default_property_id': id}"
+                      >
+                          <field string="Offers" name="offer_count" widget="statinfo"/>
+                      </button>
+                  </div>
+                  [...]
+              </sheet>
+          [...]
+      </record>
 
 .. _tutorials/server_framework_101/model_actions:
 
@@ -1298,37 +1319,168 @@ methods that execute custom business logic. These methods enable more complex wo
 processing the current records, configuring client actions depending on these records, or
 integrating with external systems.
 
-To link a button to a model-defined action, its `type` attribute must be set to `object`, and its
-`name` attribute must be set to the name of the model method to call when the button is clicked. The
-method receives the current recordset through `self` and should return a dictionary acting as an
-action descriptor.
+To link a button to a model-defined action, set its `type` attribute to `object`, and use the `name`
+attribute to specify the model method that should be called when the button is clicked. The method
+receives the current recordset through `self` and should return a value indicating the result of the
+action.
 
 .. example::
-   In the following example,
+   In the following example, a button is added to the product category form view to ensure that all
+   products in the category have a positive margin.
+
+   .. code-block:: xml
+
+      <button string="Ensure Positive Margins" type="object" name="action_ensure_positive_margins"/>
+
+   .. code-block:: python
+
+      def action_ensure_positive_margins(self):
+          self.product_ids.filtered(lambda p: p.margin <= 0).margin = 0
+          return True
 
    .. note::
-      - Action methods should be public :dfn:`not prefixed with an underscore` to make them callable
-        by the client. Such methods should always return something as they are automatically part of
-        the :doc:`external API <../../reference/external_api>`.
+      Action methods should be public :dfn:`not prefixed with an underscore` to make them callable
+      by the client. Since these methods are automatically exposed in the :doc:`external API
+      <../../reference/external_api>`, they should always return a meaningful value. In case of
+      doubt, return `True`.
 
 .. exercise::
-   #. tmp  ... in the header.
+   #. Add a button next to the :guilabel:`Salesperson` field of properties to assign the current
+      user as the salesperson.
+   #. Add two buttons for each offer in the offer list view.
+
+      - :guilabel:`Accept`: Accepts the offer, which changes the property state to :guilabel:`Under
+        Option`, and automatically refuses other offers.
+      - :guilabel:`Refuse`: Rejects only that offer.
+
+   #. Add a button in the header of the property form view to remove the property listing. The
+      button should:
+
+      #. Display a confirmation warning.
+      #. Refuse all offers.
+      #. Set the property to a new :guilabel:`Cancelled` state.
+      #. Archive the property.
 
    .. tip::
-      - Refer to the documentation on :ref:`headers <reference/view_architectures/form/header>` in
-        form views.
-
-.. todo: accept/refuse offer buttons -> auto refuse others when accepting (write)
-.. todo: multi-checkbox refuse offers in bulk
-.. todo: "assign myself as salesperson" action
+      - Refer to the documentation on :ref:`fields <reference/view_architectures/form/field>`,
+        :ref:`labels <reference/view_architectures/form/label>`, and :ref:`headers
+        <reference/view_architectures/form/header>` in form views, as well as the documentation on
+        :ref:`buttons <reference/view_architectures/list/button>` in list views.
+      - Use the `o_row` class to fit multiple elements on one line.
+      - Use the `btn-success` and `btn-danger` classes to style your buttons.
 
 .. spoiler:: Solution
 
+   .. code-block:: xml
+      :caption: `real_estate_property_views.xml`
+      :emphasize-lines: 4-9,18-26
+
+      <record id="real_estate.property_form" model="ir.ui.view">
+          [...]
+              <header>
+                  <button
+                      string="Cancel Listing"
+                      type="object"
+                      name="action_cancel_listing"
+                      confirm="Are you sure you want to cancel this property listing?"
+                  />
+                  <field name="state" widget="statusbar" options="{'clickable': True}"/>
+              </header>
+          [...]
+              <page string="Other Info">
+                  <group>
+                      <group>
+                          <field name="address_id"/>
+                          <field name="seller_id"/>
+                          <label for="salesperson_id"/>
+                          <div class="o_row">
+                              <field name="salesperson_id" class="oe_inline"/>
+                              <button
+                                  string="Assign Myself"
+                                  type="object"
+                                  name="action_assign_user_as_salesperson"
+                              />
+                          </div>
+                      </group>
+                  </group>
+              </page>
+          [...]
+      </record>
+
    .. code-block:: python
       :caption: `real_estate_property.py`
-      :emphasize-lines: 1
+      :emphasize-lines: 8,15-24
 
+      state = fields.Selection(
+          string="State",
+          selection=[
+              ('new', "New"),
+              ('offer_received', "Offer Received"),
+              ('under_option', "Under Option"),
+              ('sold', "Sold"),
+              ('cancelled', "Cancelled"),
+          ],
+          required=True,
+          default='new',
+      )
       [...]
+
+      def action_cancel_listing(self):
+          for property in self:
+              property.offer_ids.action_refuse()
+              property.write({
+                  'state': 'cancelled',
+                  'active': False,
+              })
+          return True
+
+      def action_assign_user_as_salesperson(self):
+          self.salesperson_id = self.env.user.id
+          return True
+
+   .. code-block:: xml
+      :caption: `real_estate_offer_views.xml`
+      :emphasize-lines: 4,11-12
+
+      <record id="real_estate.view_offers_action" model="ir.actions.act_window">
+          <field name="name">Offers</field>
+          <field name="res_model">real.estate.offer</field>
+          <field name="domain">[("property_id", "=", active_id)]</field>
+          [...]
+      </record>
+
+      <record id="real_estate.offer_list" model="ir.ui.view">
+          [...]
+              <field name="state"/>
+              <button string="Accept" type="object" name="action_accept" class="btn-success"/>
+              <button string="Refuse" type="object" name="action_refuse" class="btn-danger"/>
+          [...]
+      </record>
+
+   .. code-block:: python
+      :caption: `real_estate_offer.py`
+      :emphasize-lines: 1-7
+
+      def action_accept(self):
+          self.state = 'accepted'
+          self.property_id.state = 'under_option'
+          (self.property_id.offer_ids - self).state = 'refused'
+          return True
+
+      def action_refuse(self):
+          self.state = 'refused'
+          return True
+
+
+.. _tutorials/server_framework_101/scheduled_actions:
+
+Scheduled actions
+-----------------
+
+... also known as **crons**...
+
+.. todo: explain magic commands
+.. todo: ex: 6,0,0 to associate tags to properties in data
 
 ----
 

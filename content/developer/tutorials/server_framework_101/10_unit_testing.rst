@@ -4,6 +4,6 @@ Chapter 10: Unit testing
 
 tmp
 
-----
+.. todo: run with coverage
 
-.. todo: add incentive for next chapter
+----
