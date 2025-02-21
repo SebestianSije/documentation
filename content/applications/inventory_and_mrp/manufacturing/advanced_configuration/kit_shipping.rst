@@ -13,7 +13,7 @@ also useful tools for managing more complex bills of materials (BoMs).
 Create the kit as a product
 ===========================
 
-To use a kit as a sellable product, or simply as a component organization tool, the kit should first
+To use a kit as a sellable product, or as a component organization tool, the kit should first
 be created as a product.
 
 To create a kit product, go to :menuselection:`Inventory app --> Products --> Products`, and click
@@ -26,7 +26,7 @@ because the stock on-hand for kits is typically not tracked.
 .. note::
    Although kits should almost always be set to :guilabel:`Consumable`, companies using
    **Anglo-Saxon** accounting might need to create kits as a :guilabel:`Storable Product`. This is
-   because when processing invoices for kits, the Cost of Goods Sold (COGS) will be posted in
+   because when processing invoices for kits, the Cost of Goods Sold (COGS) is posted in
    accounting journals.
 
 Unlike storable products, the :guilabel:`Routes` designation under the :guilabel:`Inventory` tab
@@ -54,7 +54,6 @@ specify their quantities under the :guilabel:`Quantity` column.
 Once ready, click :guilabel:`Save` to save the newly-created :abbr:`BoM (bill of materials)`.
 
 .. image:: kit_shipping/bom-kit-selection.png
-   :align: center
    :alt: Kit selection on the bill of materials.
 
 If the kit is solely being used as a sellable product, then only components need to be added under
@@ -69,7 +68,7 @@ Use kits to manage complex BoMs
 
 Kits are also used to manage multi-level :abbr:`BoMs (bills of materials)`. These are products that
 contain **other** :abbr:`BoM (bill of materials)` products as components, and therefore require
-*nested* :abbr:`BoMs (bills of materials)`. Incorporating pre-configured kits into multi-level
+*nested* :abbr:`BoMs (bills of materials)`. Incorporating preconfigured kits into multi-level
 :abbr:`BoMs (bills of materials)` allows for cleaner organization of bundled products.
 
 To configure this type of :abbr:`BoM (bill of materials)` with a kit as a component, go to
@@ -88,7 +87,6 @@ of materials)`.
 Once ready, click :guilabel:`Save` to save changes.
 
 .. image:: kit_shipping/multilevel-bom-kit.png
-   :align: center
    :alt: Kit as a component in a multilevel bill of materials.
 
 Structure & cost
@@ -99,7 +97,6 @@ click on the :guilabel:`Structure & Cost` smart button. Sublevel :abbr:`BoMs (bi
 can be expanded and viewed from this report.
 
 .. image:: kit_shipping/structure-and-cost-kit.png
-   :align: center
    :alt: Expanded kit in the Structure and Cost report.
 
 When creating a manufacturing order for a product with a multi-level :abbr:`BoM (bill of
