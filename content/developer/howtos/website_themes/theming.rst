@@ -1,3 +1,5 @@
+.. _howtos/website/theming:
+
 =======
 Theming
 =======
@@ -10,6 +12,8 @@ theme module. In this chapter, you will discover how to:
 - Get the most out of Bootstrap variables.
 - Add custom styles and JavaScript.
 
+.. _theming/module:
+
 Theme module
 ============
 
@@ -18,6 +22,8 @@ theme, you are extending the default theme.
 
 Remember to add the directory containing your module to the `addons-path` command-line argument
 when running Odoo in your development environment.
+
+.. _theming/module/naming:
 
 Technical naming
 ----------------
@@ -32,6 +38,8 @@ The first step is to create a new directory.
    Prefix it with `website_` and use only lowercase ASCII alphanumeric characters and underscores.
 
    In this documentation, we will use **Airproof** (a fictional project) as an example.
+
+.. _theming/module/structure:
 
 File structure
 --------------
@@ -79,11 +87,16 @@ package its theme like a module.
    * - views
      - Custom views and templates (`*.xml`)
 
+.. _theming/module/initialization:
+
 Initialization
 --------------
 
 An Odoo module is also a Python package with a :file:`__init__.py` file containing import
 instructions for various Python files in the module. This file can remain empty for now.
+
+
+.. _theming/module/declaration:
 
 Declaration
 -----------
@@ -143,6 +156,8 @@ always required. It usually contains much more information.
    To create a website theme, you only need to install the Website app. If you need other apps
    (Blogs, Events, eCommerce, ...), you can also add them.
 
+.. _theming/options:
+
 Default options
 ===============
 
@@ -163,6 +178,8 @@ First, try to construct your theme by using Odoo's default options. This ensures
 
 .. seealso::
    :doc:`Odoo coding guidelines <../../../contributing/development/coding_guidelines>`
+
+.. _theming/module/variables:
 
 Odoo variables
 --------------
@@ -436,6 +453,8 @@ The colors used in a color combination are accessible and can be overridden thro
    The Website Builder automatically generates a page to view the color combinations of the theme
    color palette: http://localhost:8069/website/demo/color-combinations
 
+.. _theming/module/bootstrap:
+
 Bootstrap variables
 -------------------
 
@@ -492,6 +511,8 @@ values and *not* the :file:`primary_variables.scss` file.
 
    http://localhost:8069/website/demo/bootstrap
 
+.. _theming/module/views:
+
 Views
 -----
 
@@ -541,12 +562,16 @@ By reading the source code, templates related to options are easily found.
          <field name="active" eval="False"/>
       </record>
 
+.. _theming/assets:
+
 Assets
 ======
 
 For this part, we will refer to the `assets_frontend` bundle located in the web module. This bundle
 specifies the list of assets loaded by the Website Builder, and the goal is to add your SCSS and JS
 files to the bundle.
+
+.. _theming/assets/styles:
 
 Styles
 ------
@@ -578,6 +603,8 @@ Feel free to reuse the variables from your Bootstrap file and the ones used by O
          color: o-color('o-color-3');
          font-family: o-website-value('headings-font');
        }
+
+.. _theming/assets/interactivity:
 
 Interactivity
 -------------
