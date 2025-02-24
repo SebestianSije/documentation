@@ -1477,10 +1477,164 @@ action.
 Scheduled actions
 -----------------
 
-... also known as **crons**...
+**Scheduled actions**, also known as cron jobs, are automated tasks that run periodically at
+predefined intervals. They enable the automation of recurring operations and allow to offload
+compute-intensive tasks to dedicated workers. Scheduled actions are typically used for background
+operations such as data cleanup, third-party synchronization, report generation, and other tasks
+that don't require immediate user interaction.
 
-.. todo: explain magic commands
-.. todo: ex: 6,0,0 to associate tags to properties in data
+In Odoo, scheduled actions are implemented through the `ir.cron` model. When triggered, they execute
+arbitrary code on a specified model, most commonly by calling a model method that implements the
+desired business logic. Creating a scheduled action is simply a matter of adding a record to
+`ir.cron`, after which a cron worker will execute it at the specified intervals.
+
+.. example::
+   The following example implements a scheduled action that automatically reassigns inactive
+   products or products without sellers to the default seller.
+
+   .. code-block:: xml
+
+      <record id="reassign_inactive_products_cron" model="ir.cron">
+          <field name="name">Reassign Inactive Products</field>
+          <field name="model_id" ref="model_product"/>
+          <field name="code">model._reassign_inactive_products()</field>
+          <field name="interval_number">1</field>
+          <field name="interval_type">weeks</field>
+      </record>
+
+   .. code-block:: python
+
+    from odoo import api, models
+    from odoo.fields import Command
+
+
+    class Product(models.Model):
+
+        @api.model
+        def _reassign_inactive_products(self):
+            # Clear sellers from underperfoming products.
+            underperforming_products = self.search([('sales_count', '<', 10)])
+            underperforming_products.write({
+                'seller_ids': [Command.clear()],  # Remove all sellers.
+            })
+
+            # Assign the default seller to products without sellers.
+            products_without_sellers = self.search([('seller_ids', '=', False)])
+            if products_without_sellers:
+                default_seller = self.env.ref('product.default_seller')
+                products_without_sellers.write({
+                    'seller_ids': [Command.set(default_seller.ids)]  # Replace with default seller.
+                })
+
+   .. note::
+      - The cron is scheduled to run weekly thanks to `interval_number=1` and
+        `interval_type='weeks'`.
+      - The `@api.model` decorator indicates the method operates on the model and records in `self`
+        are not relevant. This serves both as documentation and enables RPC calls without requiring
+        record IDs.
+      - Field commands are required for `One2many` and `Many2many` fields since they cannot be
+        assigned values directly.
+      - `Command.set` takes a list of IDs as argument, which the `ids` recordset attribute
+        conveniently provides.
+
+.. seealso::
+   - Reference documentation on :ref:`scheduled actions <reference/actions/cron>`.
+   - Reference documentation on the :meth:`@api.model <odoo.api.model>` decorator.
+   - Reference documentation on :ref:`field commands <reference/fields/command>`.
+
+.. exercise::
+   #. Create a scheduled action that automatically refuses offers that have expired.
+   #. Create a scheduled action that automatically applies a 10% discount and adds the "Price
+      Reduced" tag to inactive properties. A property is considered inactive if it didn't receive
+      any offers 2 months after it was listed.
+
+   .. tip::
+      To test your crons manually, activate the :doc:`developer mode
+      </applications/general/developer_mode>`, then go to :menuselection:`Settings --> Technical
+      --> Scheduled Actions`, and click :guilabel:`Run Manually` in form view.
+
+.. spoiler:: Solution
+
+   .. code-block:: python
+      :caption: `__manifest__.py`
+      :emphasize-lines: 3
+
+      'data': [
+          # Model data
+          'data/ir_cron_data.xml',
+          [...]
+      ],
+
+   .. code-block:: xml
+      :caption: `ir_cron_data.xml`
+
+      <?xml version="1.0" encoding="utf-8"?>
+      <odoo>
+
+          <record id="real_estate.discount_inactive_properties_cron" model="ir.cron">
+              <field name="name">Real Estate: Discount Inactive Properties</field>
+              <field name="model_id" ref="model_real_estate_property"/>
+              <field name="code">model._discount_inactive_properties()</field>
+              <field name="interval_number">1</field>
+              <field name="interval_type">days</field>
+          </record>
+
+          <record id="real_estate.refuse_expired_offers_cron" model="ir.cron">
+              <field name="name">Real Estate: Refuse Expired Offers</field>
+              <field name="model_id" ref="model_real_estate_offer"/>
+              <field name="code">model._refuse_expired_offers()</field>
+              <field name="interval_number">1</field>
+              <field name="interval_type">days</field>
+          </record>
+
+      </odoo>
+
+   .. code-block:: python
+      :caption: `real_estate_offer.py`
+      :emphasize-lines: 1-4
+
+      @api.model
+      def _refuse_expired_offers(self):
+          expired_offers = self.search([('expiry_date', '<', fields.Date.today())])
+          expired_offers.action_refuse()
+
+   .. code-block:: xml
+      :caption: `real_estate_tag_data.xml`
+      :emphasize-lines: 1-4
+
+      <record id="real_estate.tag_price_reduced" model="real.estate.tag">
+          <field name="name">Price Reduced</field>
+          <field name="color">1</field>
+      </record>
+
+   .. code-block:: python
+      :caption: `real_estate_property.py`
+      :emphasize-lines: 3,10-24
+
+      from odoo import _, api, fields, models
+      from odoo.exceptions import UserError, ValidationError
+      from odoo.fields import Command
+      from odoo.tools import date_utils
+
+
+      class RealEstateProperty(models.Model):
+          [...]
+
+          @api.model
+          def _discount_inactive_properties(self):
+              two_months_ago = fields.Date.today() - date_utils.relativedelta(months=2)
+              price_reduced_tag = self.env.ref('real_estate.tag_price_reduced')
+              inactive_properties = self.search([
+                  ('create_date', '<', two_months_ago),
+                  ('active', '=', True),
+                  ('state', '=', 'new'),
+                  ('tag_ids', 'not in', price_reduced_tag.ids),  # Only discount once.
+              ])
+              for property in inactive_properties:
+                  property.write({
+                      'selling_price': property.selling_price * 0.9,
+                      'tag_ids': [Command.link(price_reduced_tag.id)],
+                  })
 
 ----
 
