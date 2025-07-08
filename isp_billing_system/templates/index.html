@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+
+{% block title %}KenyaNet ISP - Reliable Internet for Kenya{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <!-- Hero Section -->
+        <div class="card mb-4">
+            <div class="card-header card-header-kenya">
+                <h3><i class="fas fa-wifi"></i> Welcome to KenyaNet ISP</h3>
+            </div>
+            <div class="card-body">
+                <h5>Fast, Reliable Internet for Kenyan Homes and Businesses</h5>
+                <p class="lead">Connect to the future with our high-speed WiFi packages designed specifically for Kenya. 
+                   Pay easily with M-PESA, manage your account online, and enjoy 24/7 customer support.</p>
+                
+                <div class="row">
+                    <div class="col-md-4 text-center mb-3">
+                        <i class="fas fa-rocket fa-3x text-kenya mb-2"></i>
+                        <h6>High Speed</h6>
+                        <p>Up to 100 Mbps</p>
+                    </div>
+                    <div class="col-md-4 text-center mb-3">
+                        <i class="fas fa-mobile-alt fa-3x text-kenya mb-2"></i>
+                        <h6>M-PESA Payment</h6>
+                        <p>Easy mobile payments</p>
+                    </div>
+                    <div class="col-md-4 text-center mb-3">
+                        <i class="fas fa-headset fa-3x text-kenya mb-2"></i>
+                        <h6>24/7 Support</h6>
+                        <p>Always here to help</p>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <a href="{{ url_for('register') }}" class="btn btn-kenya btn-lg me-3">
+                        <i class="fas fa-user-plus"></i> Get Connected Today
+                    </a>
+                    <a href="{{ url_for('login') }}" class="btn btn-outline-secondary btn-lg">
+                        <i class="fas fa-sign-in-alt"></i> Customer Login
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Service Areas -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5><i class="fas fa-map-marker-alt"></i> Service Areas in Kenya</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Nairobi & Surrounding Areas:</h6>
+                        <ul>
+                            <li>Westlands, Karen, Kilimani</li>
+                            <li>Kileleshwa, Lavington, Runda</li>
+                            <li>Muthaiga, Spring Valley</li>
+                            <li>Parklands, Eastleigh</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Other Major Towns:</h6>
+                        <ul>
+                            <li>Mombasa, Nakuru, Eldoret</li>
+                            <li>Kisumu, Thika, Machakos</li>
+                            <li>Nyeri, Meru, Kitale</li>
+                            <li>Kakamega, Kericho</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <!-- Quick Payment -->
+        <div class="card mb-4">
+            <div class="card-header card-header-kenya">
+                <h5><i class="fas fa-mobile-alt"></i> Quick Payment</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>M-PESA Paybill:</strong> 123456</p>
+                <p><strong>Account Number:</strong> Your phone number</p>
+                <hr>
+                <p class="small">
+                    <i class="fas fa-info-circle"></i> 
+                    Pay your monthly internet bill instantly using M-PESA. 
+                    Your service will be restored automatically upon payment.
+                </p>
+            </div>
+        </div>
+
+        <!-- Contact Support -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5><i class="fas fa-headset"></i> Need Help?</h5>
+            </div>
+            <div class="card-body">
+                <p><i class="fas fa-phone"></i> <strong>Call:</strong> +254 700 000 000</p>
+                <p><i class="fas fa-envelope"></i> <strong>Email:</strong> support@kenyanet.co.ke</p>
+                <p><i class="fab fa-whatsapp"></i> <strong>WhatsApp:</strong> +254 700 000 001</p>
+                <hr>
+                <p class="small">
+                    <strong>Support Hours:</strong><br>
+                    Monday - Friday: 8:00 AM - 6:00 PM<br>
+                    Saturday: 9:00 AM - 5:00 PM<br>
+                    Sunday: Emergency support only
+                </p>
+            </div>
+        </div>
+
+        <!-- Installation Info -->
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-tools"></i> Installation</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-check text-success"></i> Free installation & setup</li>
+                    <li><i class="fas fa-check text-success"></i> Professional technicians</li>
+                    <li><i class="fas fa-check text-success"></i> Same-day installation available</li>
+                    <li><i class="fas fa-check text-success"></i> Free WiFi router</li>
+                </ul>
+                <p class="small text-muted">
+                    Installation typically takes 2-4 hours. Our team will contact you 
+                    within 24 hours of registration to schedule.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Package Preview -->
+<div class="row mt-4">
+    <div class="col-12">
+        <h3 class="text-center mb-4">Our Internet Packages</h3>
+        <div class="row">
+            <div class="col-md-3 mb-4">
+                <div class="card h-100">
+                    <div class="card-header text-center">
+                        <h5>Basic</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <h2 class="text-kenya">10 Mbps</h2>
+                        <p class="currency">2,500/month</p>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success"></i> Perfect for browsing</li>
+                            <li><i class="fas fa-check text-success"></i> Email & social media</li>
+                            <li><i class="fas fa-check text-success"></i> Light streaming</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card h-100">
+                    <div class="card-header text-center">
+                        <h5>Standard</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <h2 class="text-kenya">20 Mbps</h2>
+                        <p class="currency">4,000/month</p>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success"></i> Family internet</li>
+                            <li><i class="fas fa-check text-success"></i> HD video streaming</li>
+                            <li><i class="fas fa-check text-success"></i> Multiple devices</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card h-100 border-success">
+                    <div class="card-header text-center card-header-kenya">
+                        <h5>Premium <span class="badge bg-light text-dark">Popular</span></h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <h2 class="text-kenya">50 Mbps</h2>
+                        <p class="currency">7,500/month</p>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success"></i> High-speed gaming</li>
+                            <li><i class="fas fa-check text-success"></i> 4K streaming</li>
+                            <li><i class="fas fa-check text-success"></i> Work from home</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card h-100">
+                    <div class="card-header text-center">
+                        <h5>Business</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <h2 class="text-kenya">100 Mbps</h2>
+                        <p class="currency">12,000/month</p>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success"></i> Office use</li>
+                            <li><i class="fas fa-check text-success"></i> Video conferencing</li>
+                            <li><i class="fas fa-check text-success"></i> Priority support</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center">
+            <a href="{{ url_for('register') }}" class="btn btn-kenya btn-lg">
+                Choose Your Package & Get Started
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

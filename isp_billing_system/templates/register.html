@@ -1,0 +1,230 @@
+{% extends "base.html" %}
+
+{% block title %}Customer Registration - KenyaNet ISP{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header card-header-kenya">
+                <h3><i class="fas fa-user-plus"></i> New Customer Registration</h3>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">Join thousands of satisfied customers across Kenya. Fill out the form below to get started.</p>
+                
+                <form method="POST">
+                    <div class="row">
+                        <!-- Personal Information -->
+                        <div class="col-md-6">
+                            <h5 class="text-kenya mb-3">Personal Information</h5>
+                            
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Full Name *</label>
+                                <input type="text" class="form-control" id="name" name="name" required 
+                                       placeholder="Enter your full name">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="id_number" class="form-label">National ID Number *</label>
+                                <input type="text" class="form-control" id="id_number" name="id_number" required 
+                                       placeholder="e.g., 12345678" maxlength="20">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="phone_number" class="form-label">Phone Number *</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">+254</span>
+                                    <input type="tel" class="form-control" id="phone_number" name="phone_number" required 
+                                           placeholder="700123456" pattern="[0-9]{9}" maxlength="9">
+                                </div>
+                                <div class="form-text">This will be your login username</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email Address</label>
+                                <input type="email" class="form-control" id="email" name="email" 
+                                       placeholder="your.email@example.com">
+                                <div class="form-text">Optional but recommended for bill notifications</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="kra_pin" class="form-label">KRA PIN</label>
+                                <input type="text" class="form-control" id="kra_pin" name="kra_pin" 
+                                       placeholder="A000000000A" maxlength="11">
+                                <div class="form-text">Required for business customers only</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Location Information -->
+                        <div class="col-md-6">
+                            <h5 class="text-kenya mb-3">Location Information</h5>
+                            
+                            <div class="mb-3">
+                                <label for="physical_address" class="form-label">Physical Address *</label>
+                                <textarea class="form-control" id="physical_address" name="physical_address" 
+                                          rows="3" required placeholder="Include estate/building name, plot number, and nearest landmark"></textarea>
+                                <div class="form-text">e.g., Kileleshwa Estate, House No. 45, Near Shell Petrol Station</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="installation_location" class="form-label">Installation Location *</label>
+                                <textarea class="form-control" id="installation_location" name="installation_location" 
+                                          rows="2" required placeholder="Specific location where router will be installed"></textarea>
+                                <div class="form-text">e.g., Ground floor living room, facing the main road</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="gps_coordinates" class="form-label">GPS Coordinates (Optional)</label>
+                                <input type="text" class="form-control" id="gps_coordinates" name="gps_coordinates" 
+                                       placeholder="e.g., -1.2921, 36.8219">
+                                <div class="form-text">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="getLocation()">
+                                        <i class="fas fa-map-marker-alt"></i> Get Current Location
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="referral_code" class="form-label">Referral Code</label>
+                                <input type="text" class="form-control" id="referral_code" name="referral_code" 
+                                       placeholder="Enter referral code if you have one">
+                                <div class="form-text">Get 10% discount on your first month!</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Terms and Conditions -->
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6>Important Information:</h6>
+                                    <ul class="small">
+                                        <li>Installation is free within our service areas</li>
+                                        <li>Monthly billing starts from the date of installation</li>
+                                        <li>Payment can be made via M-PESA, bank transfer, or cash</li>
+                                        <li>Service may be suspended for overdue accounts (5+ days)</li>
+                                        <li>Your data is protected under Kenya's Data Protection Act</li>
+                                    </ul>
+                                    
+                                    <div class="form-check mt-3">
+                                        <input class="form-check-input" type="checkbox" id="agree_terms" required>
+                                        <label class="form-check-label" for="agree_terms">
+                                            I agree to the <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">Terms of Service</a> 
+                                            and <a href="#" data-bs-toggle="modal" data-bs-target="#privacyModal">Privacy Policy</a> *
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="marketing_consent">
+                                        <label class="form-check-label" for="marketing_consent">
+                                            I consent to receive promotional SMS and emails about new packages and offers
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Submit Button -->
+                    <div class="row mt-4">
+                        <div class="col-12 text-center">
+                            <button type="submit" class="btn btn-kenya btn-lg">
+                                <i class="fas fa-user-plus"></i> Complete Registration
+                            </button>
+                            <p class="mt-2 text-muted">
+                                Already have an account? <a href="{{ url_for('login') }}">Login here</a>
+                            </p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Terms Modal -->
+<div class="modal fade" id="termsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Terms of Service</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <h6>KenyaNet ISP Terms of Service</h6>
+                <p>By registering for our services, you agree to:</p>
+                <ul>
+                    <li>Pay monthly bills on time as per your selected package</li>
+                    <li>Use the internet service responsibly and legally</li>
+                    <li>Allow our technicians access for installation and maintenance</li>
+                    <li>Notify us immediately of any service issues</li>
+                    <li>Not share your connection with unauthorized users</li>
+                </ul>
+                <p><strong>Service Suspension:</strong> Services may be suspended for non-payment after 5 days past due date.</p>
+                <p><strong>Termination:</strong> Either party may terminate service with 30 days written notice.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Privacy Modal -->
+<div class="modal fade" id="privacyModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Privacy Policy</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <h6>Data Protection and Privacy</h6>
+                <p>We are committed to protecting your privacy in accordance with Kenya's Data Protection Act:</p>
+                <ul>
+                    <li>Personal data is collected only for service provision</li>
+                    <li>Your information is stored securely and not shared with third parties</li>
+                    <li>You have the right to access, correct, or delete your data</li>
+                    <li>Payment information is processed securely through encrypted channels</li>
+                    <li>Usage data may be monitored for network optimization and billing</li>
+                </ul>
+                <p><strong>Contact:</strong> For privacy concerns, email privacy@kenyanet.co.ke</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            const lat = position.coords.latitude.toFixed(6);
+            const lng = position.coords.longitude.toFixed(6);
+            document.getElementById('gps_coordinates').value = lat + ', ' + lng;
+        }, function(error) {
+            alert('Unable to get your location. Please enter manually if available.');
+        });
+    } else {
+        alert('Geolocation is not supported by this browser.');
+    }
+}
+
+// Format phone number input
+document.getElementById('phone_number').addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\D/g, '');
+    if (value.startsWith('0')) {
+        value = value.substring(1);
+    }
+    if (value.startsWith('254')) {
+        value = value.substring(3);
+    }
+    e.target.value = value;
+});
+</script>
+{% endblock %}
