@@ -1,0 +1,300 @@
+{% extends "base.html" %}
+
+{% block title %}My Account - KenyaNet ISP{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2>Welcome, {{ current_user.name }}!</h2>
+        <p class="text-muted">Phone: {{ current_user.phone_number }} | Account Status: 
+            {% if current_user.is_active %}
+                <span class="badge bg-success">Active</span>
+            {% else %}
+                <span class="badge bg-danger">Suspended</span>
+            {% endif %}
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Current Package -->
+    <div class="col-lg-4 mb-4">
+        <div class="card h-100">
+            <div class="card-header card-header-kenya">
+                <h5><i class="fas fa-box"></i> Current Package</h5>
+            </div>
+            <div class="card-body">
+                {% if subscription %}
+                    <h6>{{ subscription.package.name }}</h6>
+                    <p class="text-kenya h4">{{ subscription.package.speed_mbps }} Mbps</p>
+                    <p class="currency">{{ subscription.package.price_monthly }}/month</p>
+                    
+                    {% if subscription.package.data_cap_gb %}
+                        <p><small>Data Cap: {{ subscription.package.data_cap_gb }} GB</small></p>
+                    {% else %}
+                        <p><small>Unlimited Data</small></p>
+                    {% endif %}
+                    
+                    <div class="d-grid">
+                        <a href="{{ url_for('view_packages') }}" class="btn btn-outline-primary">
+                            <i class="fas fa-exchange-alt"></i> Change Package
+                        </a>
+                    </div>
+                {% else %}
+                    <p class="text-muted">No active package</p>
+                    <div class="d-grid">
+                        <a href="{{ url_for('view_packages') }}" class="btn btn-kenya">
+                            <i class="fas fa-plus"></i> Subscribe to Package
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Account Summary -->
+    <div class="col-lg-4 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5><i class="fas fa-chart-line"></i> Account Summary</h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-6">
+                        <h4 class="text-danger">{{ pending_bills|length }}</h4>
+                        <small>Pending Bills</small>
+                    </div>
+                    <div class="col-6">
+                        <h4 class="text-success">{{ recent_payments|length }}</h4>
+                        <small>Recent Payments</small>
+                    </div>
+                </div>
+                
+                {% if pending_bills %}
+                    <hr>
+                    <p class="text-center">
+                        <strong>Total Outstanding:</strong><br>
+                        <span class="h5 currency text-danger">
+                            {% set total_due = pending_bills|sum(attribute='amount') %}
+                            {{ "%.2f"|format(total_due) }}
+                        </span>
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="col-lg-4 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5><i class="fas fa-bolt"></i> Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    {% if pending_bills %}
+                        <a href="#billsSection" class="btn btn-kenya">
+                            <i class="fas fa-mobile-alt"></i> Pay with M-PESA
+                        </a>
+                    {% endif %}
+                    
+                    <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#supportModal">
+                        <i class="fas fa-headset"></i> Get Support
+                    </button>
+                    
+                    <a href="#" class="btn btn-outline-info" onclick="downloadInvoices()">
+                        <i class="fas fa-download"></i> Download Receipts
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Pending Bills Section -->
+{% if pending_bills %}
+<div class="row" id="billsSection">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-file-invoice-dollar"></i> Pending Bills</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Bill Period</th>
+                                <th>Package</th>
+                                <th>Amount</th>
+                                <th>Due Date</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for bill in pending_bills %}
+                            <tr>
+                                <td>
+                                    {{ bill.bill_period_start.strftime('%b %Y') }}
+                                </td>
+                                <td>{{ bill.subscription.package.name }}</td>
+                                <td class="currency">{{ "%.2f"|format(bill.amount) }}</td>
+                                <td>
+                                    {{ bill.due_date.strftime('%d %b %Y') }}
+                                    {% if bill.due_date < moment().utc %}
+                                        <span class="badge bg-danger">Overdue</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span class="badge bg-warning">{{ bill.status.title() }}</span>
+                                </td>
+                                <td>
+                                    <a href="{{ url_for('pay_bill', bill_id=bill.id) }}" 
+                                       class="btn btn-kenya btn-sm">
+                                        <i class="fas fa-mobile-alt"></i> Pay M-PESA
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>Payment Instructions:</strong><br>
+                    • M-PESA Paybill: <strong>123456</strong><br>
+                    • Account Number: <strong>{{ current_user.phone_number }}</strong><br>
+                    • Or click "Pay M-PESA" to receive payment prompt on your phone
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Recent Payments Section -->
+{% if recent_payments %}
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-history"></i> Recent Payments</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Method</th>
+                                <th>Receipt</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for payment in recent_payments %}
+                            <tr>
+                                <td>{{ payment.payment_date.strftime('%d %b %Y') }}</td>
+                                <td class="currency">{{ "%.2f"|format(payment.amount) }}</td>
+                                <td>
+                                    {% if payment.payment_method == 'mpesa' %}
+                                        <i class="fas fa-mobile-alt"></i> M-PESA
+                                    {% elif payment.payment_method == 'cash' %}
+                                        <i class="fas fa-money-bill"></i> Cash
+                                    {% else %}
+                                        <i class="fas fa-university"></i> Bank Transfer
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if payment.mpesa_receipt_number %}
+                                        {{ payment.mpesa_receipt_number }}
+                                    {% else %}
+                                        {{ payment.transaction_id }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span class="badge bg-success">{{ payment.status.title() }}</span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Support Modal -->
+<div class="modal fade" id="supportModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Contact Support</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="supportForm">
+                    <div class="mb-3">
+                        <label for="support_category" class="form-label">Issue Category</label>
+                        <select class="form-select" id="support_category" required>
+                            <option value="">Select category...</option>
+                            <option value="slow_internet">Slow Internet</option>
+                            <option value="no_connection">No Connection</option>
+                            <option value="billing">Billing Issue</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="support_subject" class="form-label">Subject</label>
+                        <input type="text" class="form-control" id="support_subject" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="support_description" class="form-label">Description</label>
+                        <textarea class="form-control" id="support_description" rows="3" required></textarea>
+                    </div>
+                </form>
+                
+                <div class="alert alert-info">
+                    <strong>For immediate help:</strong><br>
+                    📞 Call: +254 700 000 000<br>
+                    📱 WhatsApp: +254 700 000 001<br>
+                    ✉️ Email: support@kenyanet.co.ke
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-kenya" onclick="submitSupport()">Submit Ticket</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function submitSupport() {
+    // In a real system, this would submit the form via AJAX
+    alert('Support ticket submitted! We will contact you within 24 hours.');
+    document.getElementById('supportForm').reset();
+    var modal = bootstrap.Modal.getInstance(document.getElementById('supportModal'));
+    modal.hide();
+}
+
+function downloadInvoices() {
+    // In a real system, this would generate and download PDF invoices
+    alert('Invoice download feature coming soon! For now, please contact support for receipts.');
+}
+
+// Auto-refresh page every 5 minutes to check for payment updates
+setTimeout(function() {
+    location.reload();
+}, 300000);
+</script>
+{% endblock %}

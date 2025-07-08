@@ -1,0 +1,286 @@
+{% extends "base.html" %}
+
+{% block title %}Internet Packages - KenyaNet ISP{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 text-center mb-4">
+        <h2>Choose Your Internet Package</h2>
+        <p class="lead text-muted">Select the perfect speed for your needs. All packages include free installation and WiFi router.</p>
+    </div>
+</div>
+
+{% if current_subscription %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            <strong>Current Package:</strong> {{ current_subscription.package.name }} 
+            ({{ current_subscription.package.speed_mbps }} Mbps) - 
+            <span class="currency">{{ current_subscription.package.price_monthly }}/month</span>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="row">
+    {% for package in packages %}
+    <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card h-100 {% if current_subscription and current_subscription.package.id == package.id %}border-success{% endif %}">
+            {% if current_subscription and current_subscription.package.id == package.id %}
+            <div class="card-header text-center bg-success text-white">
+                <h5>{{ package.name }} <span class="badge bg-light text-dark">Current</span></h5>
+            </div>
+            {% else %}
+            <div class="card-header text-center">
+                <h5>{{ package.name }}</h5>
+            </div>
+            {% endif %}
+            
+            <div class="card-body text-center">
+                <div class="mb-3">
+                    <h2 class="text-kenya">{{ package.speed_mbps }} Mbps</h2>
+                    <p class="h4 currency">{{ package.price_monthly }}/month</p>
+                </div>
+                
+                <ul class="list-unstyled mb-4">
+                    {% if package.speed_mbps <= 10 %}
+                        <li><i class="fas fa-check text-success"></i> Perfect for browsing</li>
+                        <li><i class="fas fa-check text-success"></i> Email & social media</li>
+                        <li><i class="fas fa-check text-success"></i> Light video streaming</li>
+                        <li><i class="fas fa-check text-success"></i> 1-2 devices</li>
+                    {% elif package.speed_mbps <= 25 %}
+                        <li><i class="fas fa-check text-success"></i> Family internet use</li>
+                        <li><i class="fas fa-check text-success"></i> HD video streaming</li>
+                        <li><i class="fas fa-check text-success"></i> Social media & gaming</li>
+                        <li><i class="fas fa-check text-success"></i> 3-5 devices</li>
+                    {% elif package.speed_mbps <= 50 %}
+                        <li><i class="fas fa-check text-success"></i> High-speed gaming</li>
+                        <li><i class="fas fa-check text-success"></i> 4K video streaming</li>
+                        <li><i class="fas fa-check text-success"></i> Work from home</li>
+                        <li><i class="fas fa-check text-success"></i> 5-10 devices</li>
+                    {% else %}
+                        <li><i class="fas fa-check text-success"></i> Business grade speed</li>
+                        <li><i class="fas fa-check text-success"></i> Video conferencing</li>
+                        <li><i class="fas fa-check text-success"></i> Multiple users</li>
+                        <li><i class="fas fa-check text-success"></i> 10+ devices</li>
+                    {% endif %}
+                    
+                    {% if package.data_cap_gb %}
+                        <li><i class="fas fa-database text-warning"></i> {{ package.data_cap_gb }} GB monthly cap</li>
+                    {% else %}
+                        <li><i class="fas fa-infinity text-success"></i> Unlimited data</li>
+                    {% endif %}
+                    
+                    <li><i class="fas fa-wifi text-primary"></i> Free WiFi router</li>
+                    <li><i class="fas fa-tools text-primary"></i> Free installation</li>
+                </ul>
+                
+                {% if package.fair_usage_policy %}
+                <div class="mb-3">
+                    <small class="text-muted">
+                        <i class="fas fa-info-circle"></i> Fair Usage Policy applies
+                    </small>
+                </div>
+                {% endif %}
+                
+                <div class="d-grid">
+                    {% if current_subscription and current_subscription.package.id == package.id %}
+                        <button class="btn btn-success" disabled>
+                            <i class="fas fa-check"></i> Current Package
+                        </button>
+                    {% else %}
+                        <a href="{{ url_for('subscribe_package', package_id=package.id) }}" 
+                           class="btn btn-kenya"
+                           onclick="return confirm('{% if current_subscription %}Change to {{ package.name }}? Your current package will be deactivated.{% else %}Subscribe to {{ package.name }} package?{% endif %}')">
+                            <i class="fas fa-{% if current_subscription %}exchange-alt{% else %}plus{% endif %}"></i> 
+                            {% if current_subscription %}Switch to This{% else %}Select Package{% endif %}
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Package Comparison -->
+<div class="row mt-5">
+    <div class="col-12">
+        <h3 class="text-center mb-4">Package Comparison</h3>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Package</th>
+                        <th>Speed</th>
+                        <th>Price/Month</th>
+                        <th>Ideal For</th>
+                        <th>Max Devices</th>
+                        <th>Data Cap</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for package in packages %}
+                    <tr {% if current_subscription and current_subscription.package.id == package.id %}class="table-success"{% endif %}>
+                        <td>
+                            <strong>{{ package.name }}</strong>
+                            {% if current_subscription and current_subscription.package.id == package.id %}
+                                <span class="badge bg-success ms-2">Current</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ package.speed_mbps }} Mbps</td>
+                        <td class="currency">{{ package.price_monthly }}</td>
+                        <td>
+                            {% if package.speed_mbps <= 10 %}
+                                Basic browsing, email
+                            {% elif package.speed_mbps <= 25 %}
+                                Family use, HD streaming
+                            {% elif package.speed_mbps <= 50 %}
+                                Gaming, 4K streaming
+                            {% else %}
+                                Business, heavy usage
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if package.speed_mbps <= 10 %}
+                                1-2 devices
+                            {% elif package.speed_mbps <= 25 %}
+                                3-5 devices
+                            {% elif package.speed_mbps <= 50 %}
+                                5-10 devices
+                            {% else %}
+                                10+ devices
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if package.data_cap_gb %}
+                                {{ package.data_cap_gb }} GB
+                            {% else %}
+                                <span class="text-success">Unlimited</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Package Benefits -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header card-header-kenya">
+                <h5><i class="fas fa-star"></i> All Packages Include</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Free professional installation</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Free WiFi router (yours to keep)</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 24/7 customer support</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i> No setup fees or hidden costs</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Same-day installation available</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Easy M-PESA payment</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Package upgrade/downgrade anytime</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 99.9% uptime guarantee</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FAQ Section -->
+<div class="row mt-4">
+    <div class="col-12">
+        <h4 class="text-center mb-4">Frequently Asked Questions</h4>
+        <div class="accordion" id="faqAccordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                        How long does installation take?
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Installation typically takes 2-4 hours. Our technicians will contact you within 24 hours to schedule a convenient time.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                        Can I change my package later?
+                    </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Yes! You can upgrade or downgrade your package anytime. Changes take effect on your next billing cycle with pro-rated billing.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingThree">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                        What payment methods do you accept?
+                    </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        We accept M-PESA (easiest method), bank transfers, and cash payments. M-PESA payments are processed instantly.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingFour">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour">
+                        Is there a contract period?
+                    </button>
+                </h2>
+                <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        No long-term contracts! Pay monthly and cancel anytime with 30 days notice. We believe in earning your loyalty through great service.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12 text-center">
+        <div class="card bg-light">
+            <div class="card-body">
+                <h5>Need help choosing a package?</h5>
+                <p>Our friendly customer service team is here to help!</p>
+                <div class="row">
+                    <div class="col-md-4">
+                        <i class="fas fa-phone fa-2x text-kenya mb-2"></i>
+                        <p><strong>Call Us</strong><br>+254 700 000 000</p>
+                    </div>
+                    <div class="col-md-4">
+                        <i class="fab fa-whatsapp fa-2x text-kenya mb-2"></i>
+                        <p><strong>WhatsApp</strong><br>+254 700 000 001</p>
+                    </div>
+                    <div class="col-md-4">
+                        <i class="fas fa-envelope fa-2x text-kenya mb-2"></i>
+                        <p><strong>Email Us</strong><br>support@kenyanet.co.ke</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
